@@ -3,13 +3,13 @@ const verifyRol = async (sub) => {
     
     const response = await Users.findOne({
         where: {
-            sub: sub
+            sub: sub,
         }
     
     })
 
     if (!response) {
-        throw new Error('No se encontró ese usuario')
+        throw new Error('No user found')
     }
 
     return response.rol

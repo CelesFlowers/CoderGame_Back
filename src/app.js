@@ -4,7 +4,7 @@ const morgan = require("morgan");
 const router = require("./routes/index");
 require("dotenv").config();
 // Middlewares
-const app = express();
+const app = express(); 
 
 
 const errorHandler = (err, req, res, next) => {
@@ -15,7 +15,8 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
+
 app.use("/", router);
 app.use(errorHandler);
- 
+
 module.exports = app;

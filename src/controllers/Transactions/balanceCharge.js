@@ -2,7 +2,7 @@ const {Transactions, Wallets, Videogames, Users} = require('../../db')
 const verifyRol = require('../../helpers/verifyRol')
 
 const balanceCharge= async (idUser, amount) => {
-    
+    if(typeof amount === "string") amount = Number(amount)
     role = await verifyRol(idUser)
     if(role === 'seller'|| role==='admin') throw new Error('only customers can buy a game')
 
@@ -13,7 +13,7 @@ const balanceCharge= async (idUser, amount) => {
 
         await Transactions.create({WalletId: walletUser.id, amount: amount});
 
-        return 'se cargo saldo correctamente'
+        return `charged ${amount} to his wallet`
         }
         
     throw new Error('no se pudo cargar el saldo')

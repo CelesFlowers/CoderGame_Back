@@ -1,13 +1,19 @@
 const { Videogames, Genregames, Platforms } = require('../../db')
+const verifyRol = require('../../helpers/verifyRol')
 
-const createNewGame = async ({sub, name, released, genres, rating, platforms, description, image, price, gameLink }) => {
+const createNewGame = async ({ sub, name, released, genres, rating, platforms, description, image, price, gameLink }) => {
+
+    const rol = await verifyRol(sub)
+
+    if (rol === 'client') return res.status(403).send('No tienes el rol autorizado')
+
     const existName = await Videogames.findOne({
         where: {
             name: name
         }
     })
     if (existName) throw new Error('ya existe un juego con ese nombre')
-    const newVideoGame = await Videogames.create({UserSub:sub, name, released, genres, rating, platforms, description, image, price, gameLink })
+    const newVideoGame = await Videogames.create({ UserSub: sub, name, released, genres, rating, platforms, description, image, price, gameLink })
     const objGenres = []
     const objPlatforms = []
     for (const genre of genres) {

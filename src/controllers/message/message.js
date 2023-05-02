@@ -10,9 +10,6 @@ const createTrans = async () =>{
           user: "ramirosanchezsolano@gmail.com",
           pass: 'nvcbwryvuiiarixw'
         },
-        // tls: {
-        //     ciphers: 'SSLv3',
-        //   },
       });
       return transport
 }
@@ -31,8 +28,6 @@ const message = async (email, name) =>{
     } catch (error) {
         
     }
-    
-
 }
 
-module.exports = {message}
+module.exports = {message, createTrans}

@@ -5,6 +5,10 @@ const { getAllFavorites } = require('../controllers/Users/getAllFavoritesId')
 const { upditeProfile } = require('../controllers/Users/upditeProfile')
 const { getProfileBySub } = require('../controllers/Users/getUProfileBySub')
 const { updateUsers } = require('../controllers/Users/updateUsers')
+const { getProfileByBalance } = require('../controllers/Users/getProfileByBalance')
+const {getUserByTransaction} = require('../controllers/Users/getUserByTransactions')
+const {getBuyerUser} = require('../controllers/Users/getBuyerUser')
+const verifyRol = require('../helpers/verifyRol')
 
 const getUsersHandlers = async (req, res) => {
     
@@ -39,15 +43,16 @@ const upditeProfilehandler = async (req,res) =>{
     }
 }
 
-
 const createUserHandler = async (req, res) => {
     const { sub, name, email, user } = req.body
     console.log(`login ${user}`);
     try {
+
         // if (!name || !email || !password || !username || !lastname || !gender)
         //     throw new Error('Incomplete data')
     
         const newUser = await createNewUser({ sub, name, email })
+
         return res.status(201).json(newUser)
     } catch (error) {
         res.status(400).send({ Error: error.message })
@@ -124,7 +129,60 @@ const updateUserHandler = async (req, res) => {
     }
   }
 
+const profileByBalanceHandler = async (req, res) => {
+    const { sub } = req.params
+  
+    try {
+      const result = await getProfileByBalance(sub)
+      if (result) {
+        res.status(200).json(result)
+      } else {
+        res.status(404).json({ error: `Usuario con sub ${sub} no encontrado` })
+      }
+    } catch (error) {
+      res.status(500).json({ error: error.message })
+    }
+  }
 
+  const getUserByTransactionHandler = async (req, res) => {
+    try {
+      const user = await getUserByTransaction(req.params.sub);
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+      return res.send(user);
+    } catch (error) {
+      return res.status(500).send(`Error al obtener el usuario y sus transacciones: ${error.message}`);
+    }
+  };
+  
+  
+  const getBuyerUserHandler = async (req, res) => {
+    const sub = req.params.sub;
+  
+    const data = await getBuyerUser(sub);
+  
+    if (data.message) {
+      return res.status(500).json(data);
+    }
+  
+    return res.status(200).json(data);
+  };
+
+
+  const getRolHandler = async (req, res) => {
+    try {
+      const sub = req.params.sub;
+      const rol = await verifyRol(sub);
+      res.json({ rol });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
+  
+
+  
 
 module.exports = {
     addFavoriteHandler,
@@ -135,5 +193,10 @@ module.exports = {
     getVideogamesBuy,
     upditeProfilehandler,
     getProfileUsers,
-    updateUserHandler
+    updateUserHandler,
+    profileByBalanceHandler,
+    getUserByTransactionHandler,
+    getBuyerUserHandler,
+    getRolHandler
 }
+
