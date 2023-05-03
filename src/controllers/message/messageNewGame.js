@@ -44,6 +44,18 @@ const emailAllClient = async (game) =>{
           justify-content: center;
           height: 100vh;
         }
+        .header {
+          background: #d80000;
+          padding: 20px;
+          text-align: center;
+          color: #black;
+          border-radius: 5px;
+        }
+        .header h1 {
+          font-size: 28px;
+          color: #ffffff;
+          margin: 0;
+        }
         h1, h3 {
           color: #0057a6;
           text-align: center;
@@ -68,6 +80,9 @@ const emailAllClient = async (game) =>{
       </style>
     </head>
     <body>
+      <div class="header">
+          <h1>CoderGame</h1>
+        </div>
       <h1>New Game!!!</h1>
       <p>Do not miss the new game, be the first to buy it!!</p>
       <div>
@@ -78,11 +93,13 @@ const emailAllClient = async (game) =>{
       <script src="script.js"></script>
     </body>
     </html>`;
-    console.log(allUser[0].email)
+if(allUser.length !==0){
     allUser.map((user)=>{
-        emailNewGame(text, user.email)
+    emailNewGame(text, user.email)
 
-    })
+})
+}
+
     return 'send email Ok'
 }   
 
